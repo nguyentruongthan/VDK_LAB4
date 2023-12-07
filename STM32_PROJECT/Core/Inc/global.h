@@ -11,6 +11,7 @@
 #include "main.h"
 #include "scheduler.h"
 #include "blink_led.h"
+#include "stdio.h"
 
 uint32_t count_timer;
 #endif /* INC_GLOBAL_H_ */

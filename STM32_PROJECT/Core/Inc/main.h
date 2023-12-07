@@ -32,7 +32,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "global.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -69,7 +69,7 @@ void Error_Handler(void);
 #define LED_4_Pin GPIO_PIN_6
 #define LED_4_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
-
+UART_HandleTypeDef huart2;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "global.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,7 +42,8 @@
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef htim2;
 
-UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart2;
+
 
 /* USER CODE BEGIN PV */
 
@@ -93,33 +94,22 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_USART2_UART_Init();
-
-  HAL_UART_Transmit(&huart2, (uint8_t*)&count_timer, 1, 20);
-
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim2);
 
-  SCH_Add_Task(blink_led_every_500ms, 23, 0);
-  SCH_Add_Task(blink_led_every_1000ms, 3, 100);
-  SCH_Add_Task(blink_led_every_1500ms, 5, 150);
-  SCH_Add_Task(blink_led_every_2000ms, 7, 200);
-  SCH_Add_Task(blink_led_every_2500ms, 11, 250);
+  SCH_Add_Task(blink_led_every_500ms, 100, 0);//one shoot task
+  SCH_Add_Task(blink_led_every_1000ms, 110, 100);
+  SCH_Add_Task(blink_led_every_1500ms, 120, 150);
+  SCH_Add_Task(blink_led_every_2000ms, 150, 200);
+  SCH_Add_Task(blink_led_every_2500ms, 100, 250);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t buffer_uart[10];
   while (1)
   {
     /* USER CODE END WHILE */
 	  SCH_Dispatch_Tasks();
-		uint32_t tem = count_timer;
-		for(uint8_t i = 0; i < 10; i++){
-			buffer_uart[i] = tem%10;
-			tem = tem / 10;
-		}
-		HAL_UART_Receive(&huart2, buffer_uart, sizeof(buffer_uart), 50);
-		HAL_UART_Transmit(&huart2, buffer_uart, sizeof(buffer_uart), 50);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -267,14 +257,10 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	count_timer++;
 	SCH_Update();
+	count_timer++;
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart) {
-	if(huart -> Instance == USART2){
-	}
-}
 
 /* USER CODE END 4 */
 
